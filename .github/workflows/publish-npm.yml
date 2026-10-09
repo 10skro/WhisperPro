@@ -61,8 +61,27 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Create GitHub release with notes (no binaries)
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate user-facing notes from commits
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          PREV=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || echo "")
+          RANGE="${PREV:+$PREV..}$TAG"
+          {
+            echo "## Nouveautés"
+            git log "$RANGE" --no-merges --pretty=format:'- %s' \
+              --grep='^feat' --grep='^fix' | sed 's/^[a-z]*([^)]*): /- /; s/^[a-z]*: /- /'
+            echo
+            echo "_Publication automatique signée (npm provenance) — installation : \`npm install -g whisperpro\`_"
+          } > notes.md
+
+      - name: Create GitHub release (text only, no binaries)
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
-        run: gh release create "$TAG" --generate-notes --latest
+        run: gh release create "$TAG" --title "$TAG" --notes-file notes.md --latest
