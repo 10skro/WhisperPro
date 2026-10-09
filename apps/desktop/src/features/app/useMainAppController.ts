@@ -23,6 +23,7 @@ import {
   listInputDevices,
   listModels,
   openExternalUrl,
+  updateViaNpm,
   quitApplication as quitApplicationCmd,
   saveSettings as saveSettingsCmd,
   setActiveModel as setActiveModelCmd,
@@ -1359,11 +1360,15 @@ export function useMainAppController() {
   };
 
   const openReleasePage = async () => {
-    const target = updateReleaseUrl || RELEASES_URL;
     try {
-      await openExternalUrl(target);
+      await updateViaNpm();
     } catch {
-      window.open(target, "_blank", "noopener,noreferrer");
+      const target = updateReleaseUrl || RELEASES_URL;
+      try {
+        await openExternalUrl(target);
+      } catch {
+        window.open(target, "_blank", "noopener,noreferrer");
+      }
     }
   };
 

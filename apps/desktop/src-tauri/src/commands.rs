@@ -773,6 +773,29 @@ pub(crate) fn quit_application(app: AppHandle, state: State<'_, AppState>) -> Re
 }
 
 #[tauri::command]
+pub(crate) fn update_via_npm(app: AppHandle, state: State<'_, AppState>) -> Result<(), String> {
+    // Opens a visible terminal running the npm update, then closes the app so
+    // Windows releases the lock on the running executable.
+    let mut cmd = Command::new("cmd");
+    cmd.args([
+        "/C",
+        "start",
+        "cmd",
+        "/K",
+        "npm update -g whisperpro && echo. && echo Mise a jour terminee. Fermez cette fenetre puis relancez whisperpro.",
+    ]);
+    apply_no_window(&mut cmd);
+    cmd.spawn().map_err(|e| format!("Lancement de la mise a jour impossible: {e}"))?;
+    if let Some(runtime) = state.inner().whisper_server.lock().as_mut() {
+        let _ = runtime.child.kill();
+        let _ = runtime.child.wait();
+    }
+    info!(target: "app", "npm update requested from UI, exiting");
+    app.exit(0);
+    Ok(())
+}
+
+#[tauri::command]
 pub(crate) fn start_capture(state: State<'_, AppState>) -> Result<String, String> {
     start_capture_impl(state.inner())
 }

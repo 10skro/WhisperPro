@@ -13,7 +13,8 @@
   },
   "files": [
     "bin/cli.js",
-    "bin/WhisperPro.exe"
+    "bin/WhisperPro.exe",
+    "README.md"
   ],
   "os": [
     "win32"

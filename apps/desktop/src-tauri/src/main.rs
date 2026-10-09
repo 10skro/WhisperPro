@@ -624,6 +624,7 @@ fn main() {
             clear_history_artifacts,
             open_path_in_explorer,
             open_external_url,
+            update_via_npm,
             quit_application
         ])
         .run(tauri::generate_context!())

@@ -124,3 +124,7 @@ export function quitApplication(): Promise<void> {
 export function openExternalUrl(url: string): Promise<void> {
   return invoke<void>("open_external_url", { url });
 }
+
+export function updateViaNpm(): Promise<void> {
+  return invoke<void>("update_via_npm");
+}
