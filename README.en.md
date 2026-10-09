@@ -33,6 +33,8 @@ Faster emails and messages · real-time meeting notes · dictating first drafts 
 
 ## ⚙️ Installation
 
+> **Prerequisite: [Node.js](https://nodejs.org) must be installed** (LTS recommended). This is required — without Node.js, WhisperPro cannot be installed or launched.
+
 Distributed as an npm package (no installer, no SmartScreen prompts):
 
 ```bash
