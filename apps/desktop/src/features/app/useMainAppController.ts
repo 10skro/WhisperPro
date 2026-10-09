@@ -57,8 +57,8 @@ import type {
 } from "../shared/types";
 
 const clamp01 = (value: number) => Math.max(0, Math.min(1, value));
-const RELEASES_URL = "https://github.com/skro10/WhisperPro/releases/latest";
-const RELEASES_API_URL = "https://api.github.com/repos/skro10/WhisperPro/releases/latest";
+const RELEASES_URL = "https://www.npmjs.com/package/whisperpro";
+const RELEASES_API_URL = "https://registry.npmjs.org/whisperpro/latest";
 const normalizeVersion = (value: string) =>
   (value || "")
     .trim()
@@ -692,11 +692,11 @@ export function useMainAppController() {
         }
         const response = await fetch(RELEASES_API_URL, { cache: "no-store" });
         if (!response.ok) return;
-        const payload = (await response.json()) as { tag_name?: string; html_url?: string };
-        const latestTag = (payload.tag_name || "").trim();
+        const payload = (await response.json()) as { version?: string };
+        const latestTag = (payload.version || "").trim();
         if (!latestTag) return;
         if (isVersionGreater(latestTag, currentVersion) && !cancelled) {
-          setUpdateReleaseUrl((payload.html_url || RELEASES_URL).trim() || RELEASES_URL);
+          setUpdateReleaseUrl(RELEASES_URL);
         }
       } catch {
         // ignore network errors

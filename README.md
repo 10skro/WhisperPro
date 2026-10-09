@@ -63,10 +63,14 @@ WhisperPro is a Windows desktop app for fast, local voice dictation with a clean
 
 ## Installation
 
-1. Open the latest release:  
-   [https://github.com/skro10/WhisperPro/releases/latest](https://github.com/skro10/WhisperPro/releases/latest)
-2. Download the latest Windows installer (`WhisperPro_*_x64-setup.exe`)
-3. Run the installer
+WhisperPro is distributed as an npm package (no installer, no code signing, no SmartScreen prompts):
+
+```bash
+npm install -g whisperpro
+whisperpro
+```
+
+Requires Node.js. Updates are picked up with `npm update -g whisperpro`.
 
 ## Support
 

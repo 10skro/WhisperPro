@@ -1,0 +1,54 @@
+name: publish-npm
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install frontend deps
+        working-directory: apps/desktop
+        run: npm install
+
+      - name: Build native binary
+        working-directory: apps/desktop
+        run: npm run tauri:build -- --no-bundle
+
+      - name: Stage binary into npm package
+        shell: powershell
+        run: |
+          Copy-Item "target/release/whisperpro-desktop.exe" "npm-package/whisperpro/bin/WhisperPro.exe"
+
+      - name: Set package version from tag
+        shell: powershell
+        run: |
+          $ver = "${{ github.ref_name }}".TrimStart('v')
+          node -e "const f='npm-package/whisperpro/package.json';const p=require('./'+f);p.version=process.argv[1];require('fs').writeFileSync(f,JSON.stringify(p,null,2))" $ver
+
+      - name: Publish to npm
+        working-directory: npm-package/whisperpro
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
