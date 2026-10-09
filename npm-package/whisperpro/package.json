@@ -1,8 +1,12 @@
 {
   "name": "whisperpro",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "WhisperPro - local voice dictation for Windows. Launch with: whisperpro",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/10skro/WhisperPro.git"
+  },
   "type": "module",
   "bin": {
     "whisperpro": "bin/cli.js"
@@ -11,6 +15,10 @@
     "bin/cli.js",
     "bin/WhisperPro.exe"
   ],
-  "os": ["win32"],
-  "cpu": ["x64"]
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ]
 }
