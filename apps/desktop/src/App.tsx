@@ -28,18 +28,7 @@ function MainApp() {
           <h1>WhisperPro</h1>
           <p className="brand-subtitle">{c.uiText.topbarSubtitle}</p>
         </div>
-        <div className="topbar-center">
-          {c.updateReleaseUrl ? (
-            <button
-              type="button"
-              className="update-badge"
-              title={c.uiText.openReleasePage}
-              onClick={c.openReleasePage}
-            >
-              {c.uiText.updateAvailable}
-            </button>
-          ) : null}
-        </div>
+        <div className="topbar-center" />
         <div className="top-actions">
           <button
             type="button"
@@ -104,6 +93,16 @@ function MainApp() {
             </div>
           </div>
           {c.appVersion ? <span className="app-version">v{c.appVersion}</span> : null}
+          {c.updateReleaseUrl ? (
+            <button
+              type="button"
+              className="update-badge"
+              title={c.uiText.openReleasePage}
+              onClick={c.openReleasePage}
+            >
+              {c.uiText.updateAvailable}
+            </button>
+          ) : null}
         </div>
       </footer>
 

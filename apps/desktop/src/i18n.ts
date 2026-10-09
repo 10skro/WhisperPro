@@ -36,6 +36,7 @@ type UiText = {
   activeModel: string;
   noModelInstalled: string;
   noModelRequiredHint: string;
+  gpuUnavailableHint: string;
   statusNoModelReady: string;
   model: string;
   shortcut: string;
@@ -65,6 +66,15 @@ type UiText = {
   sectionWidget: string;
   sectionModels: string;
   sectionAdvanced: string;
+  sectionDictation: string;
+  sectionModelsSystem: string;
+  groupRecognition: string;
+  groupCapture: string;
+  groupPrivacy: string;
+  groupDisplay: string;
+  groupSounds: string;
+  groupPerformance: string;
+  modelGuideToggle: string;
   language: string;
   customLanguage: string;
   inputDevice: string;
@@ -214,6 +224,7 @@ export const UI_TEXT: Record<UiLanguage, UiText> = {
     activeModel: "Mod\u00E8le actif",
     noModelInstalled: "Aucun mod\u00E8le install\u00E9",
     noModelRequiredHint: "Installe et active un mod\u00E8le dans Options > Mod\u00E8les avant de transcrire.",
+    gpuUnavailableHint: "Acc\u00E9l\u00E9ration GPU indisponible : la transcription tournera sur le processeur (plus lent).",
     statusNoModelReady: "Aucun mod\u00E8le actif. Ouvre Options > Mod\u00E8les pour en installer un.",
     model: "Mod\u00E8le",
     shortcut: "Raccourci",
@@ -240,6 +251,15 @@ export const UI_TEXT: Record<UiLanguage, UiText> = {
     unsavedChanges: "Modifications non appliqu\u00E9es. Clique sur Appliquer pour valider.",
     sectionGeneral: "G\u00E9n\u00E9ral",
     sectionShortcutInput: "Raccourci et saisie",
+    sectionDictation: "Dict\u00E9e",
+    sectionModelsSystem: "Mod\u00E8les et syst\u00E8me",
+    groupRecognition: "Reconnaissance",
+    groupCapture: "Capture",
+    groupPrivacy: "Confidentialit\u00E9",
+    groupDisplay: "Affichage",
+    groupSounds: "Sons",
+    groupPerformance: "Performance",
+    modelGuideToggle: "Voir les conseils", 
     sectionWidget: "Widget",
     sectionModels: "Mod\u00E8les",
     sectionAdvanced: "Avanc\u00E9",
@@ -441,6 +461,7 @@ export const UI_TEXT: Record<UiLanguage, UiText> = {
     activeModel: "Active model",
     noModelInstalled: "No installed model",
     noModelRequiredHint: "Install and activate a model in Options > Models before transcribing.",
+    gpuUnavailableHint: "GPU acceleration unavailable: transcription will run on the CPU (slower).",
     statusNoModelReady: "No active model. Open Options > Models to install one.",
     model: "Model",
     shortcut: "Shortcut",
@@ -467,6 +488,15 @@ export const UI_TEXT: Record<UiLanguage, UiText> = {
     unsavedChanges: "Changes not applied yet. Click Apply to confirm.",
     sectionGeneral: "General",
     sectionShortcutInput: "Shortcut and input",
+    sectionDictation: "Dictation",
+    sectionModelsSystem: "Models and system",
+    groupRecognition: "Recognition",
+    groupCapture: "Capture",
+    groupPrivacy: "Privacy",
+    groupDisplay: "Display",
+    groupSounds: "Sounds",
+    groupPerformance: "Performance",
+    modelGuideToggle: "Show guidance", 
     sectionWidget: "Widget",
     sectionModels: "Models",
     sectionAdvanced: "Advanced",

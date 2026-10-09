@@ -23,6 +23,8 @@ export default function DictationPanel({
     installedModels,
     activeModelId,
     activeModelLabel,
+    gpuUnavailable,
+    runtimeSetupBusy,
     shortcut,
     pushToTalkHold,
     translationTarget,
@@ -43,6 +45,7 @@ export default function DictationPanel({
     onOpenSettings,
     onTogglePushToTalkHold,
     onActivateModel,
+    onRepairRuntime,
     onTranslationTargetChange,
     onShowOriginalText,
     onShowTranslatedText,
@@ -57,6 +60,20 @@ export default function DictationPanel({
           <button type="button" className="secondary" onClick={onOpenSettings}>
             {uiText.options}
           </button>
+        </div>
+      ) : null}
+
+      {gpuUnavailable && installedModels.length > 0 ? (
+        <div className="settings-warning inline-actions" role="alert">
+          <span>{uiText.gpuUnavailableHint}</span>
+          <div className="inline-actions">
+            <button type="button" className="secondary" onClick={onRepairRuntime} disabled={runtimeSetupBusy}>
+              {runtimeSetupBusy ? uiText.checkRuntime : uiText.repairAcceleration}
+            </button>
+            <button type="button" className="ghost" onClick={onOpenSettings}>
+              {uiText.options}
+            </button>
+          </div>
         </div>
       ) : null}
 
