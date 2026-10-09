@@ -36,6 +36,13 @@ jobs:
         working-directory: apps/desktop
         run: npm install
 
+      - name: Stamp app version from tag
+        shell: powershell
+        run: |
+          $ver = "${{ github.ref_name }}".TrimStart('v')
+          node -e "const f='apps/desktop/src-tauri/tauri.conf.json';const p=require('./'+f);p.version=process.argv[1];require('fs').writeFileSync(f,JSON.stringify(p,null,2))" $ver
+          node -e "const f='apps/desktop/package.json';const p=require('./'+f);p.version=process.argv[1];require('fs').writeFileSync(f,JSON.stringify(p,null,2))" $ver
+
       - name: Build native binary
         working-directory: apps/desktop
         run: npm run tauri:build -- --no-bundle

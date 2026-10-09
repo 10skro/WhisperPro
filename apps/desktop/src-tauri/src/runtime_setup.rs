@@ -34,15 +34,28 @@ pub(crate) fn ensure_runtime_dependencies(app: &AppHandle, app_state: &AppState)
     };
 
     let needs_runtime = !app_state.whisper_cli_default_path.exists();
-    let needs_nvidia_upgrade = matches!(vendor, GpuVendor::Nvidia)
+    let installed_tag = fs::read_to_string(whisper_bin_dir.join("runtime-tag.txt"))
+        .map(|s| s.trim().to_string())
+        .unwrap_or_default();
+    let available = fetch_whisper_release_assets().ok();
+    let available_tag = available.as_ref().map(|a| a.tag.clone()).unwrap_or_default();
+    let wants_gpu = matches!(vendor, GpuVendor::Nvidia);
+    let needs_nvidia_upgrade = wants_gpu
         && current_capability
             .as_ref()
             .map(|c| !c.gpu_available)
             .unwrap_or(true);
+    // A newer whisper.cpp build exists upstream: re-download only when it would
+    // actually bring a GPU runtime to this machine (never churn CPU builds).
+    let needs_newer_build = !available_tag.is_empty()
+        && available_tag != installed_tag
+        && (wants_gpu || !installed_tag.is_empty());
 
-    if needs_runtime || needs_nvidia_upgrade {
+    if needs_runtime || needs_nvidia_upgrade || needs_newer_build {
         let reason = if needs_nvidia_upgrade {
             "nvidia-gpu-detected"
+        } else if needs_newer_build {
+            "newer-runtime-build"
         } else {
             "missing-runtime"
         };
@@ -217,6 +230,11 @@ pub(crate) fn install_runtime_from_official_release(vendor: GpuVendor, install_d
         return Err("Installation runtime incomplete: whisper-cli.exe introuvable apres extraction.".to_string());
     }
 
+    let _ = fs::write(
+        install_dir.join("runtime-tag.txt"),
+        assets.tag.as_str(),
+    );
+
     Ok(format!("Runtime installe depuis {}", assets.tag))
 }
 
@@ -280,9 +298,13 @@ pub(crate) fn fetch_whisper_release_assets() -> Result<WhisperReleaseAssets, Str
 
                 if name == "whisper-bin-x64.zip" {
                     found_cpu = Some(url.clone());
-                } else if name == "whisper-cublas-11.8.0-bin-x64.zip" {
+                } else if name == "whisper-cublas-11.8.0-bin-x64.zip"
+                    || name == "whisper-bin-win-cuda-11.8.0-x64.zip"
+                {
                     found_cublas_11_8 = Some(url.clone());
-                } else if name == "whisper-cublas-12.4.0-bin-x64.zip" {
+                } else if name == "whisper-cublas-12.4.0-bin-x64.zip"
+                    || name == "whisper-bin-win-cuda-12.4.0-x64.zip"
+                {
                     found_cublas_12_4 = Some(url.clone());
                 }
             }
