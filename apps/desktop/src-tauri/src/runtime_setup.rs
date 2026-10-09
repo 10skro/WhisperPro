@@ -228,56 +228,76 @@ pub(crate) struct WhisperReleaseAssets {
 }
 
 pub(crate) fn fetch_whisper_release_assets() -> Result<WhisperReleaseAssets, String> {
+    // whisper.cpp publishes binaries on "bXXXX" build tags; the "latest" release
+    // (vX.Y.Z) often has no assets at all. Scan recent releases and use the
+    // first one that actually ships the Windows x64 assets we need.
     let response = reqwest::blocking::Client::new()
-        .get("https://api.github.com/repos/ggml-org/whisper.cpp/releases/latest")
+        .get("https://api.github.com/repos/ggml-org/whisper.cpp/releases?per_page=10")
         .header("User-Agent", "WhisperPro/1.0")
         .send()
-        .map_err(|e| format!("Lecture release whisper.cpp impossible: {e}"))?;
+        .map_err(|e| format!("Lecture releases whisper.cpp impossible: {e}"))?;
     if !response.status().is_success() {
         return Err(format!(
-            "Lecture release whisper.cpp echouee (HTTP {}).",
+            "Lecture releases whisper.cpp echouee (HTTP {}).",
             response.status()
         ));
     }
 
     let body = response
         .text()
-        .map_err(|e| format!("Lecture reponse release whisper.cpp impossible: {e}"))?;
+        .map_err(|e| format!("Lecture reponse releases whisper.cpp impossible: {e}"))?;
     let payload: serde_json::Value = serde_json::from_str(&body)
-        .map_err(|e| format!("Reponse release whisper.cpp invalide: {e}"))?;
-    let tag = payload
-        .get("tag_name")
-        .and_then(|v| v.as_str())
-        .unwrap_or("latest")
-        .to_string();
+        .map_err(|e| format!("Reponse releases whisper.cpp invalide: {e}"))?;
+    let releases = payload
+        .as_array()
+        .ok_or_else(|| "Reponse releases whisper.cpp inattendue.".to_string())?;
 
+    let mut tag = "latest".to_string();
     let mut cpu_x64: Option<String> = None;
     let mut cublas_11_8_x64: Option<String> = None;
     let mut cublas_12_4_x64: Option<String> = None;
 
-    if let Some(assets) = payload.get("assets").and_then(|v| v.as_array()) {
-        for asset in assets {
-            let name = asset
-                .get("name")
-                .and_then(|v| v.as_str())
-                .unwrap_or("")
-                .to_lowercase();
-            let url = asset
-                .get("browser_download_url")
-                .and_then(|v| v.as_str())
-                .unwrap_or("")
-                .to_string();
-            if url.is_empty() {
-                continue;
-            }
+    for release in releases {
+        let mut found_cpu: Option<String> = None;
+        let mut found_cublas_11_8: Option<String> = None;
+        let mut found_cublas_12_4: Option<String> = None;
 
-            if name == "whisper-bin-x64.zip" {
-                cpu_x64 = Some(url.clone());
-            } else if name == "whisper-cublas-11.8.0-bin-x64.zip" {
-                cublas_11_8_x64 = Some(url.clone());
-            } else if name == "whisper-cublas-12.4.0-bin-x64.zip" {
-                cublas_12_4_x64 = Some(url.clone());
+        if let Some(assets) = release.get("assets").and_then(|v| v.as_array()) {
+            for asset in assets {
+                let name = asset
+                    .get("name")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_lowercase();
+                let url = asset
+                    .get("browser_download_url")
+                    .and_then(|v| v.as_str())
+                    .unwrap_or("")
+                    .to_string();
+                if url.is_empty() {
+                    continue;
+                }
+
+                if name == "whisper-bin-x64.zip" {
+                    found_cpu = Some(url.clone());
+                } else if name == "whisper-cublas-11.8.0-bin-x64.zip" {
+                    found_cublas_11_8 = Some(url.clone());
+                } else if name == "whisper-cublas-12.4.0-bin-x64.zip" {
+                    found_cublas_12_4 = Some(url.clone());
+                }
             }
+        }
+
+        if found_cpu.is_some() || found_cublas_12_4.is_some() || found_cublas_11_8.is_some() {
+            tag = release
+                .get("tag_name")
+                .and_then(|v| v.as_str())
+                .unwrap_or("latest")
+                .to_string();
+            cpu_x64 = found_cpu;
+            cublas_11_8_x64 = found_cublas_11_8;
+            cublas_12_4_x64 = found_cublas_12_4;
+            break;
         }
     }
 
