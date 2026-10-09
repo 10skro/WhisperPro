@@ -54,3 +54,15 @@ jobs:
       - name: Publish to npm
         working-directory: npm-package/whisperpro
         run: npm publish --access public --provenance
+
+  release-notes:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Create GitHub release with notes (no binaries)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: gh release create "$TAG" --generate-notes --latest
