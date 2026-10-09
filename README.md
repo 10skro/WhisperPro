@@ -41,20 +41,6 @@ WhisperPro is a Windows desktop app for fast, local voice dictation with a clean
   - Models
   - Advanced
 
-## Latest Release (v1.6.1)
-
-- Distributed via npm (`npm install -g whisperpro`) — no installer, no SmartScreen prompts
-- Added hold-to-talk mode
-- Added Secure Text Mode
-- Added input microphone selection
-- Added update availability badge
-- Improved widget audio behavior (selected sound + volume now respected)
-- Improved widget stability on rapid repeated activations
-- Improved translation/source toggle behavior
-- Improved persistence (theme/language/settings consistency)
-- Improved transcription robustness and no-speech handling
-- UI polish and options UX cleanup
-
 ## Typical Use Cases
 
 - Writing emails and messages faster
