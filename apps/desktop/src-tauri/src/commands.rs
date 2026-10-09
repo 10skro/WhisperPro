@@ -782,7 +782,7 @@ pub(crate) fn update_via_npm(app: AppHandle, state: State<'_, AppState>) -> Resu
         "start",
         "cmd",
         "/K",
-        "npm update -g whisperpro && echo. && echo Mise a jour terminee. Fermez cette fenetre puis relancez whisperpro.",
+        "npm install -g whisperpro@latest && echo. && echo Mise a jour terminee. Fermez cette fenetre puis relancez whisperpro.",
     ]);
     apply_no_window(&mut cmd);
     cmd.spawn().map_err(|e| format!("Lancement de la mise a jour impossible: {e}"))?;

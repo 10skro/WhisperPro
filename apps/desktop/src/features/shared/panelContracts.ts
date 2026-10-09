@@ -21,6 +21,8 @@ export type DictationPanelModel = {
   installedModels: ModelInfo[];
   activeModelId: string;
   activeModelLabel: string;
+  gpuUnavailable: boolean;
+  runtimeSetupBusy: boolean;
   shortcut: string;
   pushToTalkHold: boolean;
   translationTarget: string;
@@ -49,6 +51,7 @@ export type DictationPanelHandlers = {
   onOpenSettings: () => void;
   onTogglePushToTalkHold: () => void;
   onActivateModel: (modelId: string) => void;
+  onRepairRuntime: () => void;
   onTranslationTargetChange: (next: string) => void;
   onShowOriginalText: () => void;
   onShowTranslatedText: () => void;

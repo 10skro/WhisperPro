@@ -21,6 +21,7 @@ rusqlite = { version = "0.32", features = ["bundled"] }
 tracing-subscriber = { version = "0.3", features = ["fmt", "env-filter", "json"] }
 tracing-appender = "0.2"
 tauri-plugin-global-shortcut = "2"
+tauri-plugin-single-instance = "2"
 enigo = "0.2"
 arboard = "3"
 reqwest = { version = "0.12", default-features = false, features = ["blocking", "rustls-tls", "multipart"] }
