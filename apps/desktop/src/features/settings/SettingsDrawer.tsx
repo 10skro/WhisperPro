@@ -223,7 +223,7 @@ export default function SettingsDrawer({
                       setShortcutDraft(next);
                       setSettings((s) => ({ ...s, shortcut: next }));
                     }}
-                    placeholder="Ctrl+Shift+Space"
+                    placeholder="Ctrl+Alt+Space"
                     readOnly={capturingShortcut}
                   />
                   <button

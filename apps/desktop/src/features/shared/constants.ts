@@ -67,7 +67,7 @@ export const COMPUTE_MODE_VALUES: Array<{ value: UserSettings["compute_mode"] }>
 export const defaultSettings: UserSettings = {
   language: "auto",
   translation_target: "none",
-  shortcut: "Ctrl+Shift+Space",
+  shortcut: "Ctrl+Alt+Space",
   model_path: "",
   whisper_cli_path: "",
   input_device_id: "",

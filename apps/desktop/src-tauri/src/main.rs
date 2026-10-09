@@ -288,7 +288,7 @@ fn register_or_update_global_shortcut(
 ) -> Result<(), String> {
     let shortcut = shortcut.trim();
     if shortcut.is_empty() {
-        return Err("Raccourci global vide. Exemple valide: Ctrl+Shift+Space".to_string());
+        return Err("Raccourci global vide. Exemple valide: Ctrl+Alt+Space".to_string());
     }
 
     let mut registered = app_state.registered_shortcut.lock();
@@ -543,11 +543,38 @@ fn main() {
             .map_err(|e| anyhow::anyhow!(e))?;
 
             // A shortcut already taken by another app (e.g. another dictation tool)
-            // must not prevent WhisperPro from starting: log it, keep the app alive,
-            // and let the user pick another shortcut from the options panel.
+            // must not prevent WhisperPro from starting: try known fallbacks, persist
+            // the first free one, and only warn if nothing could be registered.
             if let Err(e) = register_or_update_global_shortcut(app.handle(), state.inner(), &settings.shortcut) {
-                warn!(target: "hotkey", shortcut = %settings.shortcut, reason = %e, "global shortcut unavailable at startup");
-                record_error(state.inner(), &e);
+                warn!(target: "hotkey", shortcut = %settings.shortcut, reason = %e, "configured shortcut unavailable at startup, trying fallbacks");
+                let mut resolved: Option<String> = None;
+                for candidate in SHORTCUT_FALLBACKS {
+                    if *candidate == settings.shortcut {
+                        continue;
+                    }
+                    if register_or_update_global_shortcut(app.handle(), state.inner(), candidate).is_ok() {
+                        resolved = Some((*candidate).to_string());
+                        break;
+                    }
+                }
+                match resolved {
+                    Some(new_shortcut) => {
+                        info!(target: "hotkey", from = %settings.shortcut, to = %new_shortcut, "global shortcut fell back to a free one");
+                        let mut updated = settings.clone();
+                        updated.shortcut = new_shortcut;
+                        match open_db(&state.db_path) {
+                            Ok(conn) => {
+                                if let Err(e) = save_settings_impl(&conn, &updated) {
+                                    warn!(target: "hotkey", reason = %e, "could not persist fallback shortcut");
+                                }
+                            }
+                            Err(e) => warn!(target: "hotkey", reason = %e, "could not open db to persist fallback shortcut"),
+                        }
+                    }
+                    None => {
+                        record_error(state.inner(), &e);
+                    }
+                }
             }
             state
                 .widget_enabled

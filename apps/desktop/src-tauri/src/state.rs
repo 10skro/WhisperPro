@@ -8,6 +8,20 @@ use std::time::Instant;
 use parking_lot::Mutex;
 use serde::{Deserialize, Serialize};
 
+/// Default global dictation shortcut.
+/// Ctrl+Alt+Space is free on Windows by default (unlike Win+Shift+Space which
+/// Windows reserves, or Ctrl+Shift+Space which collides with many dictation tools).
+pub(crate) const DEFAULT_SHORTCUT: &str = "Ctrl+Alt+Space";
+
+/// Fallbacks tried at startup when the configured shortcut is already taken by
+/// another application, in priority order.
+pub(crate) const SHORTCUT_FALLBACKS: &[&str] = &[
+    "Ctrl+Alt+Space",
+    "Alt+Shift+Space",
+    "Ctrl+Shift+F12",
+    "Alt+Shift+V",
+];
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub(crate) struct UserSettings {
     pub(crate) language: String,
@@ -35,7 +49,7 @@ impl UserSettings {
         Self {
             language: "auto".to_string(),
             translation_target: "none".to_string(),
-            shortcut: "Ctrl+Shift+Space".to_string(),
+            shortcut: DEFAULT_SHORTCUT.to_string(),
             model_path,
             whisper_cli_path,
             input_device_id: String::new(),
