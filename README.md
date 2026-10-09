@@ -1,68 +1,113 @@
+<div align="center">
+
 # WhisperPro
 
-**Speak. WhisperPro writes.**
+**Dictée vocale locale, rapide et privée — sur Windows.**
 
-WhisperPro is a Windows desktop app for fast, local voice dictation with a clean workflow, modern UI, and direct text insertion into your active app.
+**Local, fast and private voice dictation — on Windows.**
 
-[Install via npm](#installation) | [Support the project](https://buymeacoffee.com/skroproduction)
+[Installation](#-installation--installation) · [Fonctionnalités](#-fonctionnalités--features) · [Support the project](https://buymeacoffee.com/skroproduction)
 
-## Key Features
+</div>
 
-- Local voice dictation optimized for speed and clarity
-- One-key global shortcut to start/stop dictation
-- Hold-to-talk mode (press = record, release = transcribe)
-- Direct text injection into the active text field
-- Live mini-widget with visual recording/transcription feedback
-- Automatic translation after transcription (multiple target languages)
-- Voice punctuation commands support
-- Secure Text Mode (no local history storage)
-- Dictation history panel with quick copy/cleanup
-- Input microphone selection in settings
-- Built-in model library (download, activate, remove)
-- Light and dark themes (+ dedicated widget theme options)
-- In-app update badge (checks the npm registry for new versions)
+---
 
-## What Makes WhisperPro Practical
+## 🇫🇷 Français
 
-- Fast setup and smooth daily workflow
-- Clear status feedback (footer + widget + mic level meter)
-- Reliable behavior on long dictation sessions
-- Designed for productivity writing: email, docs, notes, chat, drafts
+**WhisperPro** transforme votre voix en texte, dans n'importe quelle application. Un raccourci clavier global, vous parlez, le texte s'écrit là où votre curseur se trouve. Tout se passe **en local, sur votre machine** : aucun audio n'est envoyé dans le cloud, aucune donnée ne quitte votre PC.
 
-## Interface Highlights
+### 🖥️ L'interface
 
-- Main dictation panel with model/translation controls
-- Quick push-to-talk toggle in the main workflow
-- Compact status footer with mic meter and app version
-- Reworked options panel grouped by usage:
-  - General
-  - Shortcut & Input
-  - Widget
-  - Models
-  - Advanced
+![Écran principal de WhisperPro](assets/screenshots/main.png)
 
-## Typical Use Cases
+### ✨ Fonctionnalités
 
-- Writing emails and messages faster
-- Taking meeting notes in real time
-- Creating first drafts by voice
-- Dictating and translating text in seconds
+- **Dictée instantanée** — raccourci global `Ctrl+Espace` (personnalisable), ou mode *push-to-talk* : appuyez pour parler, relâchez pour transcrire
+- **100 % local** — Whisper tourne sur votre machine avec accélération GPU quand elle est disponible ; l'app détecte et répare elle-même son accélération
+- **Texte injecté directement** dans le champ actif : messagerie, traitement de texte, chat, éditeur de code…
+- **Traduction automatique** après transcription, vers plusieurs langues cibles
+- **Ponctuation vocale** — dictez « point », « virgule », « nouveau paragraphe »
+- **Widget flottant** compact avec retour visuel d'enregistrement et niveau micro
+- **Historique** des transcriptions avec copie rapide, ou **Mode Texte Sécurisé** sans aucun stockage local
+- **Bibliothèque de modèles intégrée** — de tiny à medium, téléchargement, activation et suppression depuis l'app
+- **Thèmes clair et sombre**, interface en français ou en anglais
+- **Mises à jour en un clic** depuis le pied de page
 
-## Installation
+### 🎯 Cas d'usage
 
-WhisperPro is distributed as an npm package (no installer, no code signing, no SmartScreen prompts):
+Rédiger mails et messages plus vite · prendre des notes en réunion · dicter des brouillons · traduire en parlant.
+
+### ⚙️ Installation
+
+WhisperPro se distribue via npm (pas d'installeur, pas de SmartScreen) :
 
 ```bash
 npm install -g whisperpro
 whisperpro
 ```
 
-Requires Node.js. Updates are picked up with `npm update -g whisperpro`.
+Nécessite Node.js. Mises à jour : bouton dans l'app, ou `npm install -g whisperpro@latest`.
 
-## Support
+### 🔧 Configuration
 
-[Buy Me a Coffee - skroproduction](https://buymeacoffee.com/skroproduction)
-<img width="1103" height="774" alt="Capture d&#39;écran 2026-03-10 202328" src="https://github.com/user-attachments/assets/37eac949-b8a8-4d7e-b573-479b2d375754" />
+- **Modèles** : tiny (rapide) → medium (qualité élevée), gérés depuis l'onglet *Modèles et système*
 
-<img width="1091" height="773" alt="Capture d&#39;écran 2026-03-10 202338" src="https://github.com/user-attachments/assets/da2bac26-156a-4103-8e96-c05506e103bd" />
+![Bibliothèque de modèles](assets/screenshots/models.png)
 
+- **Options** : langue, microphone, raccourci clavier, commandes de ponctuation, widget
+
+![Panneau d'options](assets/screenshots/settings.png)
+
+---
+
+## 🇬🇧 English
+
+**WhisperPro** turns your voice into text, in any application. One global keyboard shortcut, you speak, the text lands wherever your cursor is. Everything runs **locally, on your machine**: no audio ever leaves your PC.
+
+### 🖥️ The interface
+
+![WhisperPro main screen](assets/screenshots/main.png)
+
+### ✨ Features
+
+- **Instant dictation** — global `Ctrl+Space` shortcut (customizable), or push-to-talk: hold to speak, release to transcribe
+- **100 % local** — Whisper runs on your machine with GPU acceleration when available; the app detects and repairs its own acceleration setup
+- **Direct text injection** into the active field: mail clients, editors, chats, code editors…
+- **Automatic translation** after transcription, into multiple target languages
+- **Voice punctuation** — say "period", "comma", "new paragraph"
+- **Floating mini-widget** with recording feedback and live mic level
+- **Transcription history** with quick copy, or **Secure Text Mode** with zero local storage
+- **Built-in model library** — tiny to medium, download / activate / remove from the app
+- **Light and dark themes**, UI in French or English
+- **One-click updates** from the footer
+
+### 🎯 Use cases
+
+Faster emails and messages · real-time meeting notes · dictating first drafts · speak-and-translate in seconds.
+
+### ⚙️ Installation
+
+Distributed as an npm package (no installer, no SmartScreen prompts):
+
+```bash
+npm install -g whisperpro
+whisperpro
+```
+
+Requires Node.js. Updates: in-app button, or `npm install -g whisperpro@latest`.
+
+### 🔧 Configuration
+
+- **Models**: tiny (fast) → medium (high quality), managed from the *Models & system* tab
+
+![Model library](assets/screenshots/models.png)
+
+- **Options**: language, microphone, keyboard shortcut, voice punctuation, widget
+
+![Options panel](assets/screenshots/settings.png)
+
+---
+
+## ☕ Support
+
+[Buy Me a Coffee — skroproduction](https://buymeacoffee.com/skroproduction)
