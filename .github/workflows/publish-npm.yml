@@ -78,15 +78,19 @@ jobs:
         env:
           TAG: ${{ github.ref_name }}
         run: |
-          PREV=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || echo "")
-          RANGE="${PREV:+$PREV..}$TAG"
-          {
-            echo "## Nouveautés"
-            git log "$RANGE" --no-merges --pretty=format:'- %s' \
-              --grep='^feat' --grep='^fix' | sed 's/^[a-z]*([^)]*): /- /; s/^[a-z]*: /- /'
-            echo
-            echo "_Publication automatique signée (npm provenance) — installation : \`npm install -g whisperpro\`_"
-          } > notes.md
+          if [ -f CHANGELOG.md ] && awk -v tag="$TAG" 'index($0,"## "tag)==1{f=1;print;next} f&&/^## /{exit} f' CHANGELOG.md | grep -q .; then
+            awk -v tag="$TAG" 'index($0,"## "tag)==1{f=1;print;next} f&&/^## /{exit} f' CHANGELOG.md > notes.md
+          else
+            PREV=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || echo "")
+            RANGE="${PREV:+$PREV..}$TAG"
+            {
+              echo "## Nouveautés"
+              git log "$RANGE" --no-merges --pretty=format:'- %s' \
+                --grep='^feat' --grep='^fix' | sed 's/^[a-z]*([^)]*): /- /; s/^[a-z]*: /- /'
+            } > notes.md
+          fi
+          echo "" >> notes.md
+          echo "_Publication automatique signée (npm provenance) — installation : \`npm install -g whisperpro\`_" >> notes.md
 
       - name: Create GitHub release (text only, no binaries)
         env:
