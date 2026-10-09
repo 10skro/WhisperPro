@@ -1,0 +1,18 @@
+{
+  "version": "1.6.0",
+  "description": "Local voice dictation for Windows - speak, WhisperPro writes (portable build, no installer)",
+  "homepage": "https://github.com/skro10/WhisperPro",
+  "license": "MIT",
+  "url": "https://github.com/skro10/WhisperPro/releases/download/v1.6.0/WhisperPro-1.6.0-portable.zip",
+  "hash": "",
+  "bin": "WhisperPro.exe",
+  "shortcuts": [
+    ["WhisperPro.exe", "WhisperPro"]
+  ],
+  "checkver": {
+    "github": "https://github.com/skro10/WhisperPro"
+  },
+  "autoupdate": {
+    "url": "https://github.com/skro10/WhisperPro/releases/download/v$version/WhisperPro-$version-portable.zip"
+  }
+}

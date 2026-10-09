@@ -15,7 +15,7 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use parking_lot::Mutex;
 use tauri::{AppHandle, Emitter, Manager, WindowEvent};
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutEvent, ShortcutState};
-use tracing::{error, info};
+use tracing::{error, info, warn};
 use tracing_appender::non_blocking::WorkerGuard;
 use tracing_subscriber::{fmt, EnvFilter};
 
@@ -542,8 +542,13 @@ fn main() {
             )
             .map_err(|e| anyhow::anyhow!(e))?;
 
-            register_or_update_global_shortcut(app.handle(), state.inner(), &settings.shortcut)
-                .map_err(|e| anyhow::anyhow!(e))?;
+            // A shortcut already taken by another app (e.g. another dictation tool)
+            // must not prevent WhisperPro from starting: log it, keep the app alive,
+            // and let the user pick another shortcut from the options panel.
+            if let Err(e) = register_or_update_global_shortcut(app.handle(), state.inner(), &settings.shortcut) {
+                warn!(target: "hotkey", shortcut = %settings.shortcut, reason = %e, "global shortcut unavailable at startup");
+                record_error(state.inner(), &e);
+            }
             state
                 .widget_enabled
                 .store(settings.widget_enabled, Ordering::SeqCst);

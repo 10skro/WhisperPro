@@ -49,10 +49,20 @@ jobs:
           if (-not $installer) { throw "Installer not found in target/release/bundle/nsis" }
           "path=$($installer.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
+      - name: Package portable zip (no installer, no signature needed)
+        shell: powershell
+        run: |
+          $ver = "${{ github.ref_name }}".TrimStart('v')
+          New-Item -ItemType Directory -Force -Path portable | Out-Null
+          Copy-Item "target/release/whisperpro-desktop.exe" "portable/WhisperPro.exe"
+          Compress-Archive -Path "portable/WhisperPro.exe" -DestinationPath "WhisperPro-$ver-portable.zip"
+
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.installer.outputs.path }}
+          files: |
+            ${{ steps.installer.outputs.path }}
+            WhisperPro-*-portable.zip
           generate_release_notes: false
           body: |
             WhisperPro Windows installer.
