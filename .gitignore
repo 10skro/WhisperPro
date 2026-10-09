@@ -27,3 +27,7 @@ Thumbs.db
 # Local binaries / generated artifacts
 llvm-installer.exe
 artifacts/
+
+# npm launcher package: binary and tarball are build artifacts
+npm-package/whisperpro/bin/WhisperPro.exe
+npm-package/**/*.tgz
