@@ -12,27 +12,27 @@
 
 :root,
 :root[data-theme="light"] {
-  --bg-0: #f4f8ff;
-  --bg-1: #eef4ff;
-  --bg-2: #ffffff;
+  --bg-0: #edf2fa;
+  --bg-1: #e7eefb;
+  --bg-2: #f7fafd;
   --surface: #ffffff;
-  --surface-soft: #f8fbff;
+  --surface-soft: #f2f6fc;
   --surface-raised: #ffffff;
   --text-0: #0f172a;
   --text-1: #334155;
   --text-2: #667085;
-  --line: #dbe6f6;
-  --line-soft: #e8eef9;
+  --line: #c3cfdd;
+  --line-soft: #d9e2ee;
   --accent: #165dff;
   --accent-soft: #eaf2ff;
   --chip-text: #20468f;
-  --chip-border: #d6e6ff;
+  --chip-border: #c6d9f2;
   --chip-shadow: 0 3px 8px rgba(22, 93, 255, 0.12);
-  --field-border: #d0d5dd;
+  --field-border: #b7c0cc;
   --flag-bg: #f8fbff;
-  --flag-border: #dbe6f6;
+  --flag-border: #c3cfdd;
   --flag-active-bg: #ffffff;
-  --flag-active-border: #cfd8ea;
+  --flag-active-border: #b6c2d6;
   --flag-icon-border: rgba(15, 23, 42, 0.18);
   --button-primary-bg: #165dff;
   --button-primary-text: #ffffff;
@@ -42,17 +42,17 @@
   --button-ghost-text: #163f8c;
   --button-secondary-bg: #f0f5ff;
   --button-secondary-text: #254a89;
-  --button-border: #d4e2f8;
+  --button-border: #c2d2e6;
   --button-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
   --button-shadow-hover: 0 6px 14px rgba(15, 23, 42, 0.14);
   --theme-toggle-bg: #eef4ff;
   --theme-toggle-text: #20468f;
-  --theme-toggle-border: #dbe6f6;
+  --theme-toggle-border: #c3cfdd;
   --theme-toggle-dot: #165dff;
   --theme-toggle-shadow: 0 4px 12px rgba(22, 93, 255, 0.18);
-  --model-card-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
-  --card-shadow-soft: 0 5px 14px rgba(15, 23, 42, 0.08);
-  --panel-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+  --model-card-shadow: 0 8px 16px rgba(15, 23, 42, 0.1);
+  --card-shadow-soft: 0 5px 14px rgba(15, 23, 42, 0.1);
+  --panel-shadow: 0 14px 28px rgba(15, 23, 42, 0.12);
   --widget-text: #1f3d66;
   --widget-bg: rgba(246, 251, 255, 0.96);
   --widget-bg-strong: rgba(242, 248, 255, 0.98);
@@ -202,14 +202,33 @@ body {
 }
 
 .update-badge {
-  background: #f59e0b;
-  color: #1f1300;
-  border-color: #fbbf24;
-  border-radius: var(--radius-md);
-  padding: 6px 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 3px 10px;
+  min-height: 0;
   font-size: 11px;
-  font-weight: 700;
-  box-shadow: 0 3px 8px rgba(180, 110, 10, 0.22);
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  box-shadow: none;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.update-badge::before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 6px solid currentColor;
+}
+
+.update-badge:hover {
+  background: var(--accent-soft);
 }
 
 .brand-subtitle {
@@ -854,7 +873,7 @@ button.secondary {
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: grid;
-  grid-template-rows: auto auto auto minmax(0, 1fr);
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
   align-content: stretch;
   gap: 0;
   box-shadow: 0 20px 48px rgba(2, 8, 18, 0.42);
@@ -1065,6 +1084,40 @@ select {
 
 .settings-pane {
   background: transparent;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.settings-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line-soft);
+  background: var(--surface);
+}
+
+.settings-details {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 10px 12px;
+  background: var(--surface-soft);
+  display: grid;
+  gap: 10px;
+}
+
+.settings-details summary {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: var(--text-2);
+  cursor: pointer;
+}
+
+.meta.warn {
+  color: var(--warning-text);
 }
 
 .progress-header {
@@ -1559,7 +1612,7 @@ summary {
     width: 100vw;
     max-height: 100vh;
     border-radius: 0;
-    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-rows: auto auto auto minmax(0, 1fr) auto;
   }
 
   .settings-content {
